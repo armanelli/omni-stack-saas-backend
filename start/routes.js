@@ -11,3 +11,7 @@ Route.post("/auth/login", "AuthController.login");
 Route.group(() => {
   Route.resource("/teams", "TeamController").apiOnly();
 }).middleware("auth");
+
+Route.group(() => {
+  Route.post("/invites", "InviteController.store");
+}).middleware(["auth", "team"]);
