@@ -7,3 +7,7 @@ Route.get("/", () => {
 });
 
 Route.post("/auth/login", "AuthController.login");
+
+Route.group(() => {
+  Route.resource("/teams", "TeamController").apiOnly();
+}).middleware("auth");
