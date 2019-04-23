@@ -1,5 +1,7 @@
 "use strict";
 
+const Kue = use("Kue");
+const Jobs = use("App/Jobs/InvitationEmail");
 const User = use("App/Model/User");
 
 const InviteHook = (exports = module.exports = {});
@@ -12,8 +14,9 @@ InviteHook.sendInvitationEmail = async invite => {
   if (invited) {
     await invited.teams().attach(invite.team_id);
   } else {
-    //TODO: Enviar e-mail convidando para criar a conta.
+    const user = await invite.user().fetch();
+    const team = await invite.team().fetch();
 
-    console.log("Criar conta e enviar email");
+    Kue.dispatch(Job.key, { user, team, email }, { attempts: 3 });
   }
 };
